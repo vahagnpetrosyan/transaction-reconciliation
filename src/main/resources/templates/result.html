@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+<div th:fragment="reconciliation-fragment" th:id="reconciliation-result" >
+
+    <div class="header" th:class="section-header">
+        <p>Comparison Result</p>
+    </div>
+    <span th:if="${model != null}" th:inline="text" th:with="reconciliation_result=${model['reconciliation_result']}">
+        <div class="flexbox">
+            <div class="left">
+                <div class="summary-table-header">
+                    <th:block th:inline="text" th:text="${model['file1_name']}"/>
+                </div>
+                <table class="summary-table" id="summary-table-left">
+                    <tr>
+                        <td><th:block th:inline="text"/>Total Records</td>
+                        <td><th:block th:inline="text" th:text="${reconciliation_result.totalRecordsFile1}"/></td>
+                    </tr>
+                    <tr>
+                        <td><th:block th:inline="text"/>Matching Records</td>
+                        <td><th:block th:inline="text" th:text="${reconciliation_result.matchingRecords}"/></td>
+                    </tr>
+                    <tr>
+                        <td><th:block th:inline="text"/>Similar Records</td>
+                        <td><th:block th:inline="text" th:text="${reconciliation_result.similarRecords}"/></td>
+                    </tr>
+                     <tr>
+                        <td><th:block th:inline="text"/>Unmatched Records</td>
+                        <td><th:block th:inline="text" th:text="${reconciliation_result.unmatchedRecordsFile1}"/></td>
+                    </tr>
+                </table>
+            </div>
+             <div class="right">
+                <div class="summary-table-header">
+                    <th:block th:inline="text" th:text="${model['file2_name']}"/>
+                </div>
+                <table class="summary-table" id="summary-table-right">
+                    <tr>
+                        <td><th:block th:inline="text"/>Total Records</td>
+                        <td><th:block th:inline="text" th:text="${reconciliation_result.totalRecordsFile2}"/></td>
+                    </tr>
+                    <tr>
+                        <td><th:block th:inline="text"/>Matching Records</td>
+                        <td><th:block th:inline="text" th:text="${reconciliation_result.matchingRecords}"/></td>
+                    </tr>
+                    <tr>
+                        <td><th:block th:inline="text"/>Similar Records</td>
+                        <td><th:block th:inline="text" th:text="${reconciliation_result.similarRecords}"/></td>
+                    </tr>
+                     <tr>
+                        <td><th:block th:inline="text"/>Unmatched Records</td>
+                        <td><th:block th:inline="text" th:text="${reconciliation_result.unmatchedRecordsFile2}"/></td>
+                    </tr>
+                </table>
+             </div>
+        </div>
+<!--        <span th:if="${not #lists.isEmpty(reconciliation_result.unMatchedList1) and not #lists.isEmpty(reconciliation_result.unMatchedList2)}" th:inline="text" th:with="firstList=${reconciliation_result.unMatchedList1},secondList=${reconciliation_result.unMatchedList2}">-->
+            <div class="content">
+                <button th:id="report-button" class="button styl-material" th:inline="text">
+                    Unmatched items
+                    <svg class="ripple-obj" id="compare-button-svg">
+                        <use height="10%" width="10%" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#ripply-scott" class="js-ripple"></use>
+                    </svg>
+                </button>
+            </div>
+            <div id="report" style="display: flex; opacity: 0">
+                <div class="header" th:class="section-header">
+                    <p>Unmatched Report</p>
+                </div>
+
+                <div class="flexbox">
+                    <div class="left-overflow">
+                        <table class="report-table" id="report-table-left">
+                            <tr>
+                                <div form-group="true" >
+                                    <th th:inline="text">Date</th>
+                                    <th th:inline="text">Reference</th>
+                                    <th th:inline="text">Amount</th>
+                                </div>
+                            </tr>
+                            <div th:each="record : ${reconciliation_result.unMatchedList1}" form-group="true" >
+                                <tr>
+                                    <div form-group="true" >
+                                        <td align="center" th:inline="text" th:text="${record.transactionDate}"/>
+                                        <td align="center" th:inline="text" th:text="${record.walletReference}"/>
+                                        <td align="center" th:inline="text" th:text="${record.transactionAmount}"/>
+                                    </div>
+                                </tr>
+                            </div>
+                        </table>
+                    </div>
+                    <div class="right-overflow">
+                        <table class="report-table" id="report-table-right">
+                            <tr>
+                                <div form-group="true" >
+                                    <th th:inline="text">Date</th>
+                                    <th th:inline="text">Reference</th>
+                                    <th th:inline="text">Amount</th>
+                                </div>
+                            </tr>
+                            <div th:each="record : ${reconciliation_result.unMatchedList2}" form-group="true" >
+                                <tr>
+                                    <div form-group="true" >
+                                        <td align="center" th:inline="text" th:text="${record.transactionDate}"/>
+                                        <td align="center" th:inline="text" th:text="${record.walletReference}"/>
+                                        <td align="center" th:inline="text" th:text="${record.transactionAmount}"/>
+                                    </div>
+                                </tr>
+                            </div>
+                        </table>
+                    </div>
+                </div>
+            </div>
+    </span>
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        $("#report-button").click(function () {
+
+            if (document.getElementById("report").style.opacity == 1) {
+                $("#report").animate(
+                    {   opacity: 0
+                    }, 400,
+                    function() {
+                        document.getElementById("report").style.display = 'none';
+                    }
+                );
+                $(this).blur();
+                return;
+            }
+
+            document.getElementById("report").style.display = 'block';
+            $("#report").animate({duration:200, opacity: 1}, 400);
+            $(this).blur();
+
+        });
+        /*]]>*/
+    </script>
+
+</div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
